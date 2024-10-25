@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <form method="post" class="form-group mt-5">
+        <center class="container mb-2">
+
+            <h3 class="container mb-3">User Login</h3>
+            {% csrf_token %}
+            <table >
+                {% for field in form %}
+                <tr class="container form-group">
+                    <td class="form-lable">{{ field.label_tag }} : </td>
+                    <td class="form-control">{{ field }}</td>
+                </tr>
+                
+                {% endfor %}
+            </table>
+            <br>                    
+            <button type="submit" class="btn btn-info">Login</button>
+        </center>
+
+        </form>
+    </div>
+{% endblock %}
+
+    <!-- Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

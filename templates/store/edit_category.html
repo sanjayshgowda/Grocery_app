@@ -1,0 +1,38 @@
+{% extends 'store/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Category</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    <center class="container mb-2">
+    <div class="container mt-5">
+    <form method="POST" class="form-group mt-5">
+        <h1>Edit Category - {{ category.name }}</h1>
+        {% csrf_token %}
+        <table >
+            {% for field in form %}
+            <tr class="container form-group">
+                <td class="form-lable">{{ field.label_tag }} : </td>
+                <td class="form-control">{{ field }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+            <br>                    
+            <button type="submit" class="btn btn-info">Save</button>
+            <a href="{% url 'manage_products' %}">
+            <button type="submit" class="btn btn-info">Back</button>
+            </a>
+        </form>
+        </center>
+
+    </div>
+
+    {% endblock %}
+</body>
+</html>

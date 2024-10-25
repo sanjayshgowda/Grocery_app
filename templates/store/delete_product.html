@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    <center class="container mt-5">
+
+        <h1>Delete Category - {{ product.name }}</h1>
+    
+        <p>Are you sure you want to delete this category? This action cannot be undone.</p>
+    
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Yes, delete</button>
+            <a href="{% url 'manage_products' %}">
+                <button class="btn btn-info" type="submit">Cancel</button>
+            </a>
+        </form>
+    </center>
+    {% endblock %}
+</body>
+</html>

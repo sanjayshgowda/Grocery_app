@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    <center>
+
+        <h1>Thank You for Your Order!</h1>
+        <p>Your order ID is: {{ order.id }}</p>
+        <p>Shipping Address: {{ order.shipping_address }}</p>
+        <p>Total Amount: ${{ order.total_amount }}</p>
+        <a href="{% url 'cart_detail' %}">
+            <button type="submit" class="btn btn-info">Go to cart</button>
+        </a>
+    </center>
+    {% endblock %}
+</body>
+</html>

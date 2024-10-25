@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add Product</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    
+    <div class="container mt-5">
+        <form method="POST" enctype="multipart/form-data" class="form-group mt-5">
+            {% csrf_token %}
+            <center class="container mb-2">
+            <h1>Add a New Product</h1>
+            <table >
+                {% for field in form %}
+                <tr class="container form-group">
+                    <td class="form-lable">{{ field.label_tag }} : </td>
+                    <td class="form-control">{{ field }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+                <br>                    
+                <button type="submit" class="btn btn-info">Add Product</button>
+                <a href="{% url 'manage_products' %}">
+                <button type="submit" class="btn btn-info">Back</button>
+                </a>
+            </center>
+            </form>
+    
+        </div>
+    {% endblock %}
+</body>
+</html>

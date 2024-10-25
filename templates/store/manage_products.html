@@ -1,0 +1,70 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Manage Products </title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    <center>
+    <h1>Manage Products and Categories</h1>
+    <div class="container mt-3 mb-3">
+
+        <a href="{% url 'add_product' %}">
+            <button type="submit" class="btn btn-info">Add new Product</button>
+        </a>
+        <a href="{% url 'add_category' %}">
+            <button type="submit" class="btn btn-info">Add New Category</button>
+    
+                
+    </a>
+    <table class="container mt-3 table table-bordered table-striped">
+        <thead>
+            <tr class="container form-group">
+                <th>Product</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr class="container form-group">
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.category }}</td>
+                <td>
+                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table class="container-fluid table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in category %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{% url 'edit_category' category.id %}">Edit</a> |
+                    <a href="{% url 'delete_category' category.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</center>
+    {% endblock %}
+</body>
+</html>

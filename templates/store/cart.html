@@ -1,0 +1,60 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+{% block content %}
+    <div class="form-group mt-5">
+        <center class="container mb-2">
+        <h1>Your Cart</h1>
+            <table >
+                <thead>
+                    <tr class="container form-group"> 
+                        <th class="aligh-center">Product</th>
+                        <th class="align-center">Quantity</th>
+                        <th class="center">Price</th>
+                        <th class="center">Total</th>
+                        <th class="center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for item in items %}
+                    <tr class="container justify-content-center form-group">
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            <form class="form-group mt-5" method="POST" action="{% url 'update_cart' item.id %}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                                <button class="btn btn-info" type="submit">Update</button>
+                            </form>
+                        </td>
+                        <td>${{ item.product.price }}</td>
+                        <td>${{ total_price }}</td>
+                        <td>
+                            <form class="form-group mt-5" method="POST" action="{% url 'remove_cart_item' item.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p><strong>Total:</strong> $
+                {{ total_price }}
+            </p>
+            <a href="{% url 'checkout' %}"><button class="btn btn-success" type="submit">Proceed To checkout</button></a>
+        {% endblock %}
+        </center>
+    </div>
+    
+</body>
+</html>

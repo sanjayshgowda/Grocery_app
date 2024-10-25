@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Product Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .product-flex {
+            display: flex;
+            align-items: center; /* Center the items vertically */
+        }
+
+        .product-image {
+            max-width: 200px; /* Adjusted size */
+            margin-right: 20px; /* Space between image and details */
+        }
+    </style>
+</head>
+
+<body>
+    {% block content %}
+    <div class="product-detail-container">
+        <div class="container mt-5 table-bordered">
+            <h1>{{ product.name }}</h1>
+            <div class="product-flex">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px; margin-right: 20px;">
+                <div class="product-info">
+                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                    <p><strong>Description:</strong> {{ product.description }}</p>
+                    <p><strong>Category:</strong> {{ product.category.name }}</p>
+                    
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" name="quantity" id="quantity" value="1" min="1">
+                        <button class="btn btn-primary" type="submit">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            <a href="{% url 'product_list' %}">Back to Product List</a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

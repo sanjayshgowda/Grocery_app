@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    {% block content %}
+    <center>
+    <h1>Checkout</h1>
+    <form method="POST" class="form-group mt-5">
+        {% csrf_token %}
+        <h2>Your Cart</h2>
+        {% for item in cart_items %}
+        <p>{{ item.product.name }} - ${{ item.get_total_price }}</p>
+        {% endfor %}
+        <p><strong>Total:</strong> ${{ total_amount }}</p>
+        
+        <label for="shipping_address">Shipping Address:</label>
+        <textarea id="shipping_address" name="shipping_address" required></textarea>
+        <br>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+</center>
+    {% endblock %}
+</body>
+</html>
