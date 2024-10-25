@@ -8,13 +8,15 @@
 </head>
 <body>
     {% block content %}
-    
+    <!-- Main content block for adding a new product -->
     <div class="container mt-5">
+        <!-- Form for submitting a new product with file upload capability -->
         <form method="POST" enctype="multipart/form-data" class="form-group mt-5">
             {% csrf_token %}
             <center class="container mb-2">
             <h1>Add a New Product</h1>
             <table >
+                <!-- Iterating through the form fields to display them in a table format -->
                 {% for field in form %}
                 <tr class="container form-group">
                     <td class="form-lable">{{ field.label_tag }} : </td>
@@ -23,13 +25,14 @@
                 {% endfor %}
             </table>
                 <br>                    
+                <!-- Button to submit the form and add the product -->
                 <button type="submit" class="btn btn-info">Add Product</button>
+                <!-- Link to go back to the product management page -->
                 <a href="{% url 'manage_products' %}">
                 <button type="submit" class="btn btn-info">Back</button>
                 </a>
             </center>
             </form>
-    
         </div>
     {% endblock %}
 </body>

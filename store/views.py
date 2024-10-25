@@ -11,12 +11,18 @@ from django.contrib import messages
 
 # View for displaying product details
 def product_detail(request, product_id):
+    """
+    Retrieve and display the details of a specific product identified by product_id.
+    """
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'store/product_details.html', {'product': product})
 
 # Restrict the view to superusers only
 @user_passes_test(lambda u: u.is_superuser)
 def manage_products(request):
+    """
+    Display all products and categories for management, accessible only to superusers.
+    """
     products = Product.objects.all()
     category = Category.objects.all()
     return render(request, 'store/manage_products.html', {'products': products, 'category': category})
@@ -24,6 +30,10 @@ def manage_products(request):
 # Add a new product
 @user_passes_test(lambda u: u.is_superuser)
 def add_product(request):
+    """
+    Handle the addition of a new product, accessible only to superusers. 
+    Processes form submission for creating a new product.
+    """
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES )
         if form.is_valid():
@@ -38,6 +48,10 @@ def add_product(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def add_category(request):
+    """
+    Handle the addition of a new category, accessible only to superusers. 
+    Processes form submission for creating a new category.
+    """
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -53,6 +67,10 @@ def add_category(request):
 # Edit an existing product
 @user_passes_test(lambda u: u.is_superuser)
 def edit_product(request, product_id):
+    """
+    Facilitate product editing for a specific product identified by product_id, 
+    accessible only to superusers.
+    """
     product = get_object_or_404(Product, id=product_id)
     
     if request.method == 'POST':
@@ -68,6 +86,10 @@ def edit_product(request, product_id):
 # Delete a product
 user_passes_test(lambda u: u.is_superuser)
 def delete_product(request, product_id):
+    """
+    Handle product deletion for a specific product identified by product_id, 
+    accessible only to superusers.
+    """
     product = get_object_or_404(Product, id=product_id)
     
     if request.method == 'POST':
@@ -79,6 +101,9 @@ def delete_product(request, product_id):
 
 # Product List View
 def product_list(request):
+    """
+    Display a list of products, optionally filtered by category based on query parameters.
+    """
     categories = Category.objects.all().order_by('name')
     category_id = request.GET.get('category')  # Get category id from query parameters
     if category_id:
@@ -92,12 +117,19 @@ def product_list(request):
 
 # Product Detail View
 def product_detail(request, product_id):
+    """
+    Retrieve and display the details of a specific product identified by product_id.
+    """
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'store/product_detail.html', {'product': product})
 
 # Add Product to Cart
 @login_required
 def add_to_cart(request, product_id):
+    """
+    Add a specified product to the user's cart.
+    Requires user to be logged in.
+    """
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
@@ -108,6 +140,10 @@ def add_to_cart(request, product_id):
 # Cart Detail View
 @login_required
 def cart_detail(request):
+    """
+    Display the contents of the user's cart, including the total price.
+    Requires user to be logged in.
+    """
     cart = Cart.objects.get(user=request.user)
     items = CartItem.objects.filter(cart=cart)
     total_price = sum(item.product.price * item.quantity for item in items)
@@ -127,6 +163,11 @@ def view_cart(request):
 '''
 @login_required
 def update_cart(request, item_id):
+    """
+    Update the quantity of a specified cart item; 
+    if the quantity is set to zero, the item is removed from the cart.
+    Requires user to be logged in.
+    """
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     
     if request.method == 'POST':
@@ -144,6 +185,10 @@ def update_cart(request, item_id):
 
 @login_required
 def remove_cart_item(request, item_id):
+    """
+    Remove a specific cart item identified by item_id from the user's cart.
+    Requires user to be logged in.
+    """
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
     messages.success(request, 'Item removed from cart.')
@@ -152,6 +197,10 @@ def remove_cart_item(request, item_id):
 # Order Checkout
 @login_required
 def checkout(request):
+    """
+    Handle the checkout process, allowing users to finalize their order.
+    Requires user to be logged in.
+    """
     try:
         cart = Cart.objects.get(user=request.user)
         items = CartItem.objects.filter(cart=cart)
@@ -181,6 +230,9 @@ def checkout(request):
     return render(request, 'store/checkout.html', {'cart_items': items, 'total_amount': total_amount})
 
 def register(request):
+    """
+    Handle user registration, creating a new user and logging them in if successful.
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -194,6 +246,10 @@ def register(request):
 
 # User Login View (optional if using Django's default login view)
 def user_login(request):
+    """
+    Handle user login via form submission.
+    Validates credentials and logs the user in if successful.
+    """
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -213,22 +269,35 @@ def user_login(request):
 
 # User Logout View
 def user_logout(request):
+    """
+    Log out the user and redirect them to the product list.
+    """
     logout(request)
     messages.info(request, "You have successfully logged out.")
     return redirect('product_list')
 
 @login_required
 def order_confirmation(request, order_id):
+    """
+    Display the details of a specific order identified by order_id to the logged-in user.
+    """
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'store/orders.html', {'order': order})
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_dashboard(request):
+    """
+    Display the admin dashboard with a list of all categories, accessible only to superusers.
+    """
     categories = Category.objects.all()
     return render(request, 'store/admin_dashboard.html', {'categories': categories})
 
 @user_passes_test(lambda u: u.is_superuser)
 def edit_category(request, category_id):
+    """
+    Facilitate editing of a specific category identified by category_id, 
+    accessible only to superusers.
+    """
     category = get_object_or_404(Category, id=category_id)
     
     if request.method == 'POST':
@@ -244,6 +313,10 @@ def edit_category(request, category_id):
 
 @user_passes_test(lambda u: u.is_superuser)
 def delete_category(request, category_id):
+    """
+    Handle deletion of a specific category identified by category_id, 
+    accessible only to superusers.
+    """
     category = get_object_or_404(Category, id=category_id)
     
     if request.method == 'POST':
@@ -254,4 +327,7 @@ def delete_category(request, category_id):
     return render(request, 'store/delete_category.html', {'category': category})
 
 def home(request):
+    """
+    Render the home page of the application.
+    """
     return render(request, 'home/home.html')
