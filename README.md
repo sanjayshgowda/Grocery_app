@@ -1,3 +1,5 @@
+Steps to run and test the application locally.
+
 1. Project Setup
 
 	•	Clone the repository:
